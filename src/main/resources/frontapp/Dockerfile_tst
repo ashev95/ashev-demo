@@ -1,0 +1,18 @@
+FROM node:18.12.1
+WORKDIR /frontapp/vue-project/
+COPY /src/main/resources/frontapp/run_tst.sh /frontapp/vue-project/run_tst.sh
+COPY /../cert/tst/ /frontapp/cert/tst/
+
+RUN apt-get update
+
+RUN apt-get -y install nginx
+
+RUN apt-get -y install nano
+
+# удаляем дефолтный сайт и его конфиг из nginx
+RUN ["/bin/bash", "-c", "rm /etc/nginx/sites-enabled/default"]
+RUN ["/bin/bash", "-c", "rm -r /var/www/html"]
+
+# помещаем свой сайт и его конфиг в nginx
+COPY /src/main/resources/frontapp/nginx_tst.conf /etc/nginx/sites-enabled/ashev-demo.conf
+COPY /frontend/vue-project/dist/tst /var/www/ashev-demo

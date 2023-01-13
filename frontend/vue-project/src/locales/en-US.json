@@ -1,0 +1,81 @@
+{
+  "app": {
+    "name": "Task list"
+  },
+  "nav": {
+    "title": "Tasks"
+  },
+  "win": {
+    "empty": "Select a task from left panel or create",
+    "title": "Title",
+    "description": "Description",
+    "completed": "Completed",
+    "save": "Save",
+    "edit": "Edit",
+    "remove": "Remove"
+  },
+  "tab": {
+    "new": "New task"
+  },
+  "alert": {
+    "unknown_error": {
+      "title": "Ooops...",
+      "message": "Something went wrong"
+    },
+    "login_error": {
+      "title": "It seems you forgot your password",
+      "message": "Please try again"
+    },
+    "register_success": {
+      "title": "User created",
+      "message": "You can log in"
+    },
+    "user_already_exists": {
+      "title": "User already exists",
+      "message": "Try input another Login"
+    }
+  },
+  "loading": {
+    "title": "Loading information"
+  },
+  "validation": {
+    "login_form": {
+      "login_empty": "Field is required",
+      "login_incorrect": "Field can contain only numbers, latin symbols, dots, underscore. No more 15 symbols",
+      "password_empty": "Field is required",
+      "password_incorrect": "Field can contain only numbers, latin symbols, dots, underscore. No more 30 symbols"
+    },
+    "register_form": {
+      "login_empty": "Field is required",
+      "login_incorrect": "Field can contain only numbers, latin symbols, dots, underscore. No more 15 symbols",
+      "password_empty": "Field is required",
+      "password_incorrect": "Field can contain only numbers, latin symbols, dots, underscore. No more 30 symbols",
+      "passwords_not_equal": "Passwords are not equal"
+    },
+    "task_form": {
+      "title_empty": "Field is required",
+      "title_incorrect": "Field can't contain more 255 symbols",
+      "description_empty": "Field is required",
+      "description_incorrect": "Field can't contain more 255 symbols"
+    }
+  },
+  "button": {
+    "submit": "Enter",
+    "register": "Register",
+    "logout": "Logout",
+    "add": "add"
+  },
+  "auth": {
+    "login": "Login",
+    "password": "Password"
+  },
+  "register": {
+    "login": "Enter Login",
+    "password": "Enter password",
+    "password2": "Repeat password"
+  },
+  "auth_tabs": {
+    "auth": "Login",
+    "register": "Registration"
+  }
+}

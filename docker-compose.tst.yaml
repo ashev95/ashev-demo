@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+  dbhost:
+    image: postgres:14.2
+    restart: "no"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - static-network1
+    volumes:
+      - ./docker_db_host_data/db-volume:/var/lib/postgresql/data
+      - ./src/main/resources/dbapp/db-script/init.sql:/docker-entrypoint-initdb.d/init.sql
+  backhost:
+    build:
+      context: .
+      dockerfile: src/main/resources/backapp/Dockerfile_tst
+      args:
+        APP_KEYSTORE: ${APP_KEYSTORE}
+        APP_KEYSTORE_PASSWORD: ${APP_KEYSTORE_PASSWORD}
+        APP_KEYSTORE_TYPE: ${APP_KEYSTORE_TYPE}
+    restart: "no"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      APP_KEYSTORE: ${APP_KEYSTORE}
+      APP_KEYSTORE_PASSWORD: ${APP_KEYSTORE_PASSWORD}
+      APP_KEYSTORE_TYPE: ${APP_KEYSTORE_TYPE}
+    entrypoint: ["./wait-for-it.sh", "dbhost:5432", "--",
+                 "java", "-jar",
+                 "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:7342",
+                 "-Dfile.encoding=UTF-8", "/backapp/backend-0.0.1-SNAPSHOT.jar", "com.example.demo.DemoApplication", "--server.port=8091"]
+    networks:
+      - static-network1
+    depends_on:
+      - dbhost
+  fronthost:
+    build:
+      context: .
+      dockerfile: src/main/resources/frontapp/Dockerfile_tst
+    restart: "no"
+    entrypoint: ["./run_tst.sh"]
+    networks:
+      - static-network1
+    ports:
+      - "8080:443"
+networks:
+  static-network1:
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24

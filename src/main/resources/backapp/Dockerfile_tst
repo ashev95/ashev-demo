@@ -1,0 +1,16 @@
+FROM openjdk:11
+
+COPY /src/main/resources/wait-for-it.sh /wait-for-it.sh
+COPY /../backend/target/tst/backend-0.0.1-SNAPSHOT.jar /backapp/
+COPY /../cert/tst/ /backapp/cert/tst/
+
+ARG APP_KEYSTORE
+ARG APP_KEYSTORE_PASSWORD
+ARG APP_KEYSTORE_TYPE
+
+RUN keytool -noprompt -importkeystore -srckeystore /backapp/cert/tst/localhost.pfx -srcstoretype $APP_KEYSTORE_TYPE -srcstorepass $APP_KEYSTORE_PASSWORD -destkeystore $APP_KEYSTORE -deststoretype $APP_KEYSTORE_TYPE -deststorepass $APP_KEYSTORE_PASSWORD
+
+RUN apt-get update
+RUN apt-get -y install iputils-ping
+RUN apt-get install net-tools
+RUN apt-get -y install nmap

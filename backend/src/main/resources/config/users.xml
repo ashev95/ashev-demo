@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><user_config><users><users><login>user</login><password>123</password><roles><role>USER</role></roles></users><users><login>admin</login><password>123</password><roles><role>USER</role><role>ADMIN</role></roles></users></users></user_config>

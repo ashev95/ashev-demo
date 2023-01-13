@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  dbhost:
+    image: postgres:14.2
+    restart: "no"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - static-network1
+    volumes:
+      - ./docker_db_host_data/db-volume:/var/lib/postgresql/data
+      - ./src/main/resources/dbapp/db-script/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+networks:
+  static-network1:
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24
