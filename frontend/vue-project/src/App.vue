@@ -29,7 +29,7 @@ export default defineComponent({
         AppAuthorization
     },
     setup() {
-        const { t } = useI18n()
+        const { t, locale } = useI18n()
         const notify = (title: string, message: string) => {
             ElNotification({
                 title: t(title),
@@ -55,6 +55,7 @@ export default defineComponent({
         const setToken = (token: string) => {
             csrfToken.value = token;
         }
+        const clientLanguage = ref('en-US')
         const state = ref(PageState.LOADING)
         const changeState = (newState: PageState) => {
             state.value = newState
@@ -74,9 +75,13 @@ export default defineComponent({
             }).then(response => {
                 if (response.ok) {
                     return response.text();
-                } else if (response.status === 401) {
+                } else if (response.status === 401 || response.status == 403) {
                     console.error(response);
-                    notify('alert.login_error.title', 'alert.login_error.message')
+                    if (response.status === 401) {
+                        notify('alert.login_error.title', 'alert.login_error.message')
+                    } else {
+                        notify('alert.login_attempts_exceeded_error.title', 'alert.login_attempts_exceeded_error.message')
+                    }
                     changeState(PageState.NOT_AUTHENTICATED)
                     stopLoading()
                     return;
@@ -127,11 +132,13 @@ export default defineComponent({
         }
         return {
             t,
+            locale,
             notify,
             startLoading,
             stopLoading,
             csrfToken,
             setToken,
+            clientLanguage,
             state,
             changeState,
             taskWorkspace,
@@ -146,11 +153,16 @@ export default defineComponent({
     },
     mounted() {
         document.title = this.t('app.name');
-        fetch('/api')
-        .then(response => {
+        fetch('/api/client/language')
+        .then(response => response.text())
+        .then((language: string) => {
+            this.clientLanguage = language;
+            this.locale = language;
+            return fetch('/api')
+        }).then(response => {
             if (response.ok) {
                 return response.text()
-            } else if (response.status === 401) {
+            } else if (response.status === 401 || response.status === 403) {
                 this.changeState(PageState.NOT_AUTHENTICATED)
                 this.stopLoading()
                 throw new Error('NoError')

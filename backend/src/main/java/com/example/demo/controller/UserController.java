@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,13 +24,7 @@ public class UserController {
     @RequestMapping("/new")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@RequestBody UserConfig userConfig) {
-        boolean userExists = true;
-        try {
-            customJdbcUserDetailsManager.loadUserByUsername(userConfig.getLogin());
-        } catch (UsernameNotFoundException e) {
-            userExists = false;
-        }
-        if (userExists) {
+        if (customJdbcUserDetailsManager.userExists(userConfig.getLogin())) {
             return ResponseEntity.badRequest().build();
         }
         String prefix = "{bcrypt}"; //Префикс, чтобы Spring знал, какой способ шифрования

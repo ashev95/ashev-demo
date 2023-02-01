@@ -7,15 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.sql.DataSource;
@@ -24,6 +22,7 @@ import java.io.InputStream;
 
 @Configuration
 @EnableWebSecurity
+@EnableScheduling
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -40,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/task/**").authenticated()
 				.antMatchers("/").authenticated()
-				.antMatchers("/user/new").permitAll()
+				.antMatchers("/user/new", "/client/language").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.httpBasic()
@@ -52,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID")
 				.and()
-				.csrf().ignoringAntMatchers("/user/new");
+				.csrf().ignoringAntMatchers("/user/new", "/client/language");
 	}
 
 	@Bean

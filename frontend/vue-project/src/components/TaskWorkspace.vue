@@ -125,7 +125,7 @@ export default defineComponent({
         }
     },
     beforeCreate() {
-        fetch('api/profile')
+        fetch('api/client/profile')
         .then(response => response.json())
         .then((data: WebUser) => {
             console.log(data);

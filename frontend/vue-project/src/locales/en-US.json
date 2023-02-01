@@ -26,6 +26,10 @@
       "title": "It seems you forgot your password",
       "message": "Please try again"
     },
+    "login_attempts_exceeded_error": {
+      "title": "Number of attempts exceeded",
+      "message": "Please try again later"
+    },
     "register_success": {
       "title": "User created",
       "message": "You can log in"
@@ -36,7 +40,7 @@
     }
   },
   "loading": {
-    "title": "Loading information"
+    "title": "..."
   },
   "validation": {
     "login_form": {
